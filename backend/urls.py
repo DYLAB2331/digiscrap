@@ -27,6 +27,7 @@ from scrapbook.views import (
     dashboardView,
     uploadPhotoView,
     deletePhotoView,
+    redirectToLogin,
 )
 
 urlpatterns = [
@@ -37,6 +38,7 @@ urlpatterns = [
     path("dashboard/", dashboardView, name="dashboard"),
     path("upload/", uploadPhotoView, name="uploadPhoto"),
     path("delete/", deletePhotoView, name="deletePhoto"),
+    path("", redirectToLogin, name="redirectToLogin"),
 ]
 
 if settings.DEBUG:

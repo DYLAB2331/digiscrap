@@ -77,7 +77,6 @@ def dashboardView(request):
     return render(request, "dashboard.html", {"photos": photos})
 
 # Photo upload and display implementation
-
 from .models import Photo
 from .forms import PhotoForm
 
@@ -98,7 +97,6 @@ def uploadPhotoView(request):
     return render(request, "photoUpload.html", {"form": form})
 
 # Photo deletion
-
 @require_POST
 def deletePhotoView(request):
     photoIDs = request.POST.getlist("photoIDs")
@@ -109,6 +107,9 @@ def deletePhotoView(request):
         photo.delete()
         
     return redirect("dashboard")
+
+def redirectToLogin(request):
+    return redirect('login')
 
 # def registerView(request):
 #     if request.method == "POST":
