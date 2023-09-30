@@ -78,12 +78,12 @@ def dashboardView(request):
 
 # Photo upload and display implementation
 from .models import Photo
-from .forms import PhotoForm
+from .forms import UploadPhotoForm
 
 @login_required
 def uploadPhotoView(request):
     if request.method == "POST":
-        form = PhotoForm(request.POST, request.FILES)
+        form = UploadPhotoForm(request.POST, request.FILES)
 
         if form.is_valid():
             photo = form.save(commit=False)
@@ -92,7 +92,7 @@ def uploadPhotoView(request):
             return redirect("dashboard")
         
     else:
-        form = PhotoForm()
+        form = UploadPhotoForm()
     
     return render(request, "photoUpload.html", {"form": form})
 
