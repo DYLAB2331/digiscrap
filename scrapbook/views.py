@@ -6,8 +6,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ValidationError
+from django.http import JsonResponse
 
 # Create your views here.
+
+def redirectToLogin(request):
+    return redirect('login')
 
 def registerView(request):
     context = {}
@@ -73,10 +77,10 @@ def logoutView(request):
 
 @login_required
 def dashboardView(request):
-    photos = Photo.objects.filter(user=request.user)
+    photos = Photo.objects.filter(users=request.user)
     return render(request, "dashboard.html", {"photos": photos})
 
-# Photo upload and display implementation
+# Photo upload  
 from .models import Photo
 from .forms import UploadPhotoForm
 
@@ -86,15 +90,37 @@ def uploadPhotoView(request):
         form = UploadPhotoForm(request.POST, request.FILES)
 
         if form.is_valid():
-            photo = form.save(commit=False)
-            photo.user = request.user
-            photo.save()
+            photo = form.save()
+            photo.users.add(request.user)
             return redirect("dashboard")
         
     else:
         form = UploadPhotoForm()
     
     return render(request, "photoUpload.html", {"form": form})
+
+# Photo sharing
+@require_POST
+def sharePhotoView(request):
+    if request.method == "POST":
+
+        usernameShare = request.POST.get("username")
+
+        try:
+            usernameShare = User.objects.get(username=usernameShare)
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Username does not exist'})
+        
+        user = request.user
+        photos = Photo.objects.filter(users=user)
+
+        for photo in photos:
+            photo.users.add(usernameShare)
+            photo.save()
+
+        return JsonResponse({'status': 'success', 'message': 'Photos shared successfully'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
 # Photo deletion
 @require_POST
@@ -108,8 +134,6 @@ def deletePhotoView(request):
         
     return redirect("dashboard")
 
-def redirectToLogin(request):
-    return redirect('login')
 
 # def registerView(request):
 #     if request.method == "POST":

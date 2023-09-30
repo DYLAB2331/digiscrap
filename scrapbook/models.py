@@ -12,3 +12,4 @@ class Photo(models.Model):
 class UserPhotoThroughRelation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+

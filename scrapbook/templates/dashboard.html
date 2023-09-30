@@ -14,6 +14,10 @@
           </li>
 
           <li class="nav-item">
+            <button type="button" class="me-1 btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#shareModal">Share</button>
+          </li>
+
+          <li class="nav-item">
             <button id="deleteButton" class="me-1 btn btn-outline-danger" onclick="toggleDeleteMode()">Delete</button>
           </li>
 
@@ -46,6 +50,32 @@
         <p>No photos uploaded yet.</p>
       {% endfor %}
     </form>
+  </div>
+
+  <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shareModalLabel">Input a Username to Share Photos</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" id="shareForm">
+            {% csrf_token %}
+
+            <div class="form-floating mb-3">
+              <input type="text" name="username" class="form-control" id="usernameShareField" placeholder="Enter username">
+              <label for="usernameShareField">Username</label>
+            </div>
+
+            <p id="shareError" style="color: red;"></p>
+            <p id="shareSuccess" style="color: green;"></p>
+
+            <button type="submit" class="btn btn-primary w-100">Share</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 
 {% endblock %}

@@ -26,6 +26,7 @@ from scrapbook.views import (
     logoutView,
     dashboardView,
     uploadPhotoView,
+    sharePhotoView,
     deletePhotoView,
     redirectToLogin,
 )
@@ -37,6 +38,7 @@ urlpatterns = [
     path("logout/", logoutView, name="logout"),
     path("dashboard/", dashboardView, name="dashboard"),
     path("upload/", uploadPhotoView, name="uploadPhoto"),
+    path("share/", sharePhotoView, name="sharePhoto"),
     path("delete/", deletePhotoView, name="deletePhoto"),
     path("", redirectToLogin, name="redirectToLogin"),
 ]
