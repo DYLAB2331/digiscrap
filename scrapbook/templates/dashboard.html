@@ -32,18 +32,22 @@
     </div>
   </nav>
 
-  <form id="deleteForm" method="post" action="{% url 'deletePhoto' %}">
-    {% csrf_token %}
-    {% for photo in photos %}
-      <div class="mt-3">
-        <input type="checkbox" name="photoIDs" value="{{ photo.id }}" class="photo-checkbox d-none">
-        <img src="{{ photo.image.url }}" alt="{{ photo.description }}" style="width: 250px; height: auto">
-        <p>{{ photo.description }}</p>
-      </div>
-    {% empty %}
-      <p>No photos uploaded yet.</p>
-    {% endfor %}
-  </form>
+  <div class="container">
+    <form method="post" action="{% url 'deletePhoto' %}" id="deleteForm" >
+      {% csrf_token %}
+      {% for photo in photos %}
+        <div class="mt-3 d-flex flex-column align-items-center">
+          <img src="{{ photo.image.url }}" alt="{{ photo.description }}" style="width: 250px; height: auto">
+          <input type="checkbox" name="photoIDs" value="{{ photo.id }}" class="photo-checkbox d-none">
+          <p class="mt-1">{{ photo.date }}</p>
+          <p>{{ photo.description }}</p>
+        </div>
+      {% empty %}
+        <p>No photos uploaded yet.</p>
+      {% endfor %}
+    </form>
+  </div>
+
 {% endblock %}
 
 {% block extra_js %}
