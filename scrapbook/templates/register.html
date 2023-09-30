@@ -1,11 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Register</h1>
-
-  <form method="post">
+<div class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
+  <form method="POST" action="{% url 'register' %}" class="w-50">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Register</button>
+
+    <!-- Name, Username, Password, Email fields -->
+    <div class="form-floating mb-4">
+      <input type="text" name="firstName" class="form-control" id="fNameFieldRegister" placeholder="First Name" value="{{ firstName }}" required/>
+      <label for="fNameFieldRegister">First Name</label>
+    </div>
+
+    <div class="form-floating mb-4">
+      <input type="text" name="lastName" class="form-control" id="lNameFieldRegister" placeholder="Last Name" value="{{ lastName }}" required/>
+      <label for="lNameFieldRegister">Last Name</label>
+    </div>
+
+    <div class="form-floating mb-4">
+      <input type="text" name="email" class="form-control" id="emailFieldRegister" placeholder="Email" value="{{ email }}" required/>
+      <label for="emailFieldRegister">Email</label>
+    </div>
+
+    <div class="form-floating mb-4">
+      <input type="text" name="username" class="form-control" id="usernameFieldRegister" placeholder="Username" value="{{ username }}" required/>
+      <label for="usernameFieldRegister">Username</label>
+    </div>
+
+    <div class="form-floating mb-4">
+      <input type="password" name="password" class="form-control" id="passwordFieldRegister" placeholder="Password" value="{{ password }}" required/>
+      <label for="passwordFieldRegister">Password</label>
+    </div>
+
+    <div class="form-floating mb-4">
+      <input type="password" name="password2" class="form-control" id="password2FieldRegister" placeholder="Password Confirmation" required/>
+      <label for="password2FieldRegister">Password Confirmation</label>
+    </div>
+
+    {% if error %}
+    <p style="color: red">{{ error }}</p>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary btn-block mb-4 w-100">Register</button>
   </form>
+</div>
+
 {% endblock %}
