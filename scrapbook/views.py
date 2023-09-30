@@ -78,7 +78,10 @@ def logoutView(request):
 @login_required
 def dashboardView(request):
     photos = Photo.objects.filter(users=request.user)
-    return render(request, "dashboard.html", {"photos": photos})
+    context = {}
+    context["photos"] = photos
+    context["user"] = request.user
+    return render(request, "dashboard.html", context)
 
 # Photo upload  
 from .models import Photo
