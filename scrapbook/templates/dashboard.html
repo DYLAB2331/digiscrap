@@ -8,31 +8,32 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="navBarLeft">
           <li class="nav-item">
-            <a href="{% url 'uploadPhoto' %}" class="me-1 btn btn-outline-primary">Upload Photo</a>
+            <a href="{% url 'uploadPhoto' %}" class="me-1 mt-2 mb-2 mb-md-0 mt-md-0 btn btn-outline-primary">Upload Photo</a>
           </li>
 
           <li class="nav-item">
-            <button type="button" class="me-1 btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#shareModal">Share</button>
+            <button type="button" class="me-1 mb-2 mb-md-0 btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#shareModal">Share</button>
           </li>
 
           <li class="nav-item">
-            <button id="deleteButton" class="me-1 btn btn-outline-danger" onclick="toggleDeleteMode()">Delete</button>
+            <button id="deleteButton" class="me-1 mb-2 mb-md-0 btn btn-outline-danger" onclick="toggleDeleteMode()">Delete</button>
           </li>
 
           <li class="nav-item">
-            <button id="cancelButton" class="btn btn-outline-danger d-none" onclick="toggleCancelButton()">Cancel</button>
+            <button id="cancelButton" class="mb-2 mb-md-0 btn btn-outline-danger d-none" onclick="toggleCancelButton()">Cancel</button>
           </li>
         </ul>
         
-        <span class="me-2">Hello, {{ user.username }}</span>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+        <span class="me-2 mb-1 mb-md-0">Hello, {{ user.username }}</span>
 
-        <a href="{% url 'logout' %}" class="ms-1 ms-sm-0 btn btn-outline-danger">Logout</a>
+        <a href="{% url 'logout' %}" class="me-2 mb-2 mb-md-0 btn btn-outline-danger">Logout</a>
+
+        <form class="d-flex" role="search">
+          <button class="me-2 btn btn-outline-success" type="submit">Search</button>
+          <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+        </form>
       </div>
     </div>
   </nav>
