@@ -10,7 +10,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="navBarLeft">
           <li class="nav-item">
-            <a href="{% url 'uploadPhoto' %}" class="me-1 mt-2 mb-2 mb-md-0 mt-md-0 btn btn-outline-primary">Upload Photo</a>
+            <button type="button" class="me-1 mt-2 mb-2 mb-md-0 mt-md-0 btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">Upload</a>
           </li>
 
           <li class="nav-item">
@@ -54,6 +54,44 @@
     </form>
   </div>
 
+  <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="uploadModalLabel">Upload a Photo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" id="uploadForm" enctype="multipart/form-data" onsubmit="console.log('Inline submit event triggered'); return false;">
+            {% csrf_token %}
+
+            <div class="form-floating mb-3">
+              <input type="file" name="photo" class="form-control" id="photoUploadField" placeholder="Upload a Photo">
+              <label for="photoUploadField">Select Photo</label>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input type="text" name="photoDescription" class="form-control" id="photoDescriptionField" placeholder="Enter a description...">
+              <label for="photoDescriptionField">Enter a description...</label>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input type="date" name="photoDate" class="form-control" id="photoDateField">
+              <label for="photoDateField">Enter a date...</label>
+            </div>
+
+            <p id="uploadError" style="color: red;"></p>
+            <p id="uploadSuccess" style="color: green;"></p>
+
+            <button type="submit" class="btn btn-primary w-100" id="uploadButton">Upload</button>
+            <button onclick="console.log('Button clicked')">Click Me</button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -79,6 +117,8 @@
       </div>
     </div>
   </div>
+
+
 
 {% endblock %}
 

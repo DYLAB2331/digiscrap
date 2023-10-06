@@ -7,11 +7,12 @@ from django.contrib.auth.password_validation import validate_password
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+import json
 
 # Create your views here.
 
 def redirectToLogin(request):
-    return redirect('login')
+    return redirect("login")
 
 def registerView(request):
     context = {}
@@ -24,11 +25,11 @@ def registerView(request):
         password = request.POST.get("password")
         passwordConfirm = request.POST.get("password2")
 
-        context['firstName'] = firstName
-        context['lastName'] = lastName
-        context['email'] = email
-        context['username'] = username
-        context['password'] = password
+        context["firstName"] = firstName
+        context["lastName"] = lastName
+        context["email"] = email
+        context["username"] = username
+        context["password"] = password
 
         if password == passwordConfirm:
             # Password validation using built in validate_password() and ValidationError
@@ -53,7 +54,7 @@ def registerView(request):
             context["error"] = "Passwords do not match"
             return render(request, "register.html", context)
     
-    return render(request, 'register.html', context)
+    return render(request, "register.html", context)
 
 def loginView(request):
     if request.method == "POST":
@@ -84,25 +85,28 @@ def dashboardView(request):
     return render(request, "dashboard.html", context)
 
 # Photo upload  
-from .models import Photo
-from .forms import UploadPhotoForm
+from .models import Photo, UserPhotoThroughRelation
 
-@login_required
+# @login_required
+# @require_POST
 def uploadPhotoView(request):
     if request.method == "POST":
-        form = UploadPhotoForm(request.POST, request.FILES)
+        uploadedPhoto = request.FILES.get("photo")
+        uploadedDescription = request.POST.get("description")
+        uploadedDate = request.POST.get("date")
 
-        if form.is_valid():
-            photo = form.save()
-            photo.users.add(request.user)
-            return redirect("dashboard")
-        
+        photo = Photo(image=uploadedPhoto, description=uploadedDescription, date=uploadedDate)
+        photo.save()
+
+        userPhotoRel = UserPhotoThroughRelation(user=request.user, photo=photo)
+        userPhotoRel.save()
+
+        return JsonResponse({"status": "success", "message" : "Photos uploaded sucessfully"})
     else:
-        form = UploadPhotoForm()
-    
-    return render(request, "photoUpload.html", {"form": form})
+        return JsonResponse({"status": "error", "message" : "Photos not uploaded"})
 
 # Photo sharing
+@login_required
 @require_POST
 def sharePhotoView(request):
     if request.method == "POST":
@@ -112,7 +116,7 @@ def sharePhotoView(request):
         try:
             usernameShare = User.objects.get(username=usernameShare)
         except User.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': 'Username does not exist'})
+            return JsonResponse({"status": "error", "message": "Username does not exist"})
         
         user = request.user
         photos = Photo.objects.filter(users=user)
@@ -121,11 +125,12 @@ def sharePhotoView(request):
             photo.users.add(usernameShare)
             photo.save()
 
-        return JsonResponse({'status': 'success', 'message': 'Photos shared successfully'})
+        return JsonResponse({"status": "success", "message": "Photos shared successfully"})
     else:
-        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+        return JsonResponse({"status": "error", "message": "Invalid request method"})
 
 # Photo deletion
+@login_required
 @require_POST
 def deletePhotoView(request):
     photoIDs = request.POST.getlist("photoIDs")
@@ -167,3 +172,17 @@ def deletePhotoView(request):
 #         form = AuthenticationForm()
 
 #     return render(request, "login.html", {"form": form})
+
+# def uploadPhotoView(request):
+#     if request.method == "POST":
+#         form = UploadPhotoForm(request.POST, request.FILES)
+
+#         if form.is_valid():
+#             photo = form.save()
+#             photo.users.add(request.user)
+#             return redirect("dashboard")
+        
+#     else:
+#         form = UploadPhotoForm()
+    
+#     return render(request, "photoUpload.html", {"form": form})

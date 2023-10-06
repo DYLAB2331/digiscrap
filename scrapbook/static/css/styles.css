@@ -1,8 +1,8 @@
 /* Center navbar buttons on a mobile display */
 @media (max-width: 992px) {
     #navbarSupportedContent {
-      display: flex;
-      flex-direction: column;
+        display: flex;
+        flex-direction: column;
     }
 
     #navBarLeft {
@@ -11,6 +11,10 @@
     }
 
     #navbarSupportedContent .navbar-nav .nav-item {
-      float: none;
+        float: none;
     }
-  }
+
+    .nav-btn {
+        
+    }
+}

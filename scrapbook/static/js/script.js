@@ -37,15 +37,16 @@ function toggleCancelButton() {
 
 document.addEventListener('DOMContentLoaded', function() {
     const shareForm = document.getElementById('shareForm');
+    const uploadForm = document.getElementById('uploadForm');
 
+    // Event listener for shareForm
     if (shareForm) {
         shareForm.addEventListener('submit', function(event) {
             event.preventDefault();
             const username = document.getElementById('usernameShareField').value;
-
             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-            fetch('/share/', {
+            fetch('share/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -70,7 +71,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error:', error);
             });
         });
-    } else {
-        console.log("Did not find shareForm.");  
     }
 });
+
+$(document).ready(function() {
+    $("#uploadForm").on('submit', function(event) {
+        console.log("Inside event listener");
+        event.preventDefault();
+
+        let photoFile = $("#photoUploadField")[0].files[0];
+        let photoDescription = $("#photoDescriptionField").val();
+        let photoDate = $("#photoDateField").val();
+        let csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+
+        let formData = new FormData();
+        formData.append('photo', photoFile);
+        formData.append('description', photoDescription);
+        formData.append('date', photoDate);
+
+        $.ajax({
+            url: 'upload/',
+            type: 'POST',
+            headers: {'X-CSRFToken': csrfToken},
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                if (data.status === 'success') {
+                    $("#uploadSuccess").text(data.message);
+                    $("#uploadError").text('');
+                } else {
+                    $("#uploadError").text(data.message);
+                    $("#uploadSuccess").text('');
+                }
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+
+
+
+
